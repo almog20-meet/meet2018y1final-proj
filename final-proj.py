@@ -3,20 +3,58 @@ import turtle
 import random
 
 
+
+min_x= -300
+max_x= 300
+min_y= -500
+max_y= 500
+
 turtle.tracer(1,0)
 turtle.setup(750, 1050)
 
 
+# generates random x values for the falling items
+def rand_x():
+    return random.randint(min_x + 5, max_x - 5)
+    
+        #Pick a position that is a random multiple of SQUARE_SIZE
+    pap_x = random.randint(min_x,max_x)*T_BIN_SIZE
+    pap_y = 290
+    pap.goto(pap_x,pap_y)
+    pap_turtle_pos=(pap_x,pap_y)
+    pap_pos.append(paper_turtle_pos)
+    pap_stamp = pap.stamp()
+    pap_stamps.append(food_stamp)#
+    print(pap_pos)
+
+# making paper and trash turtles
+paper = turtle.clone()
+turtle.register_shape("paperball.gif")
+paper.shape("paperball.gif")
+paper.penup()
+paper.goto(rand_x(), min_y)
+
+trash = turtle.clone() 
+turtle.register_shape("trash.gif")
+trash.shape("trash.gif")
+trash.penup()
+round_x = (rand_x()//20)*20
+trash.goto(round_x, min_y)
 
 #part 1
 #difine
+DISTANCE = 10
 paper_pos_list = []
+pap_pos = []
 score = 0
 level = 1
 live = 3
 x_t_bin_pos= 0
 y_t_bin_pos= -450
 my_pos = (x_t_bin_pos, y_t_bin_pos)
+my_turtles = [paper, trash]
+
+
 #make pos for trash bin
 
 T_BIN_SIZE = 20
@@ -32,18 +70,16 @@ DOWN_EDGE = -500
 RIGHT_EDGE = 300
 LEFT_EDGE = -300
 
+ # bin turtle
+turtle.register_shape("recycle.gif")
 t_bin = turtle.Turtle()
-t_bin.shape("circle")
+t_bin.shape("recycle.gif")
 
-paper = turtle.Turtle()
-paper.shape("turtle")
 
-trash = turtle.clone()
-trash.shape("square")
 t_bin.penup()
 
 border = turtle.clone()
-border.width(20)
+border.width(10)
 border.hideturtle()
 border.penup()
 border.goto(-300, 500)
@@ -54,50 +90,94 @@ border.goto(300,500)
 border.goto(-300,500)
 
 
-#part2
+def move_rand_turtle():
+    for t in my_turtles:
+        x,y = t.pos()
+        t.goto(x,y-DISTANCE) # move papers in list down
+    check_edge()    
+    turtle.ontimer(move_rand_turtle, 100)
 
 t_bin.goto(x_t_bin_pos, y_t_bin_pos)
+if my_pos in pap_pos:
+    paper.hideturtle()
+    check_edge()
+    pap_pos.pop[0]
+    score = score+1
+
+    print(score)
+
+def check_edge():
+    for t in my_turtles:
+        x,y = t.pos()
+        if y == 0 and len (my_turtles) <= 3:
+            my_turtles.append(t.clone())
+        if y <= -max_y:
+            t.hideturtle()
+            # decrease rate at which objects start falling by increasing range. Ex (1,20)
+            if random.randint(1,35) == 10:
+                t.goto(rand_x(), max_y)
+                t.showturtle()
+   
+
 
 #MOVE TRASHH BIN 
 #right
 def right():
     global  direction
     direction=RIGHT
-    move_t_bin()
+    if lock:
+        move_t_bin()
     print("you pressed the right key")
 
 #LEFT
 def left():
     global  direction
     direction=LEFT
-    move_t_bin()
+    if lock:
+        move_t_bin()
     print("you pressed the left key")
 
 turtle.onkeypress(right, RIGHT_ARROW)
 turtle.onkeypress(left, LEFT_ARROW)
 turtle.listen()
 
+lock = True
+
 def move_t_bin():
-    my_pos = t_bin.pos()
-    x_pos = my_pos[0]
-    y_pos = my_pos[1]
-    new_pos = t_bin.pos()
-    new_x_pos = my_pos[0]
-    new_y_pos = my_pos[1]
-    global RIGHT_EDGE, LEFT_EDGE, direction
-    if direction==RIGHT:
-        t_bin.goto(new_x_pos + T_BIN_SIZE, y_t_bin_pos)
-        print("You moved right!")
-        my_pos=(new_x_pos + T_BIN_SIZE, y_t_bin_pos)
-    elif direction==LEFT:
-        t_bin.goto(new_x_pos - T_BIN_SIZE, y_t_bin_pos)
-        print("You moved left!")
-        my_pos=(new_x_pos - T_BIN_SIZE, y_t_bin_pos)
-
-while new_x_pos >= RIGHT_EDGE:
-    direction = None        
-
-while new_x_pos <= LEFT_EDGE:
-    direction = None
+    global lock
+    if lock:
+        lock = False
+        my_pos = t_bin.pos()
+        x_pos = my_pos[0]
+        y_pos = my_pos[1]
+        new_pos = t_bin.pos()
+        new_x_pos = my_pos[0]
+        new_y_pos = my_pos[1]
+        global RIGHT_EDGE, LEFT_EDGE, direction
+       # print(new_pos)
+        if direction==RIGHT:
+            if new_x_pos >= RIGHT_EDGE - 20: #-20 pixels to not get into the walls
+                direction = None    #Checks if the t_bin inside the walls
+                t_bin.goto(RIGHT_EDGE - T_BIN_SIZE, y_t_bin_pos)
 
 
+            else:
+                t_bin.goto(new_x_pos + T_BIN_SIZE, y_t_bin_pos)
+                print("You moved right!")
+                my_pos=(new_x_pos + T_BIN_SIZE, y_t_bin_pos)
+        elif direction==LEFT:
+            if new_x_pos <= LEFT_EDGE + 20: #+20 pixels to not get into the walls
+                direction = None    #Checks if the t_bin inside the walls
+                t_bin.goto(LEFT_EDGE + T_BIN_SIZE, y_t_bin_pos)
+
+            else:
+                t_bin.goto(new_x_pos - T_BIN_SIZE, y_t_bin_pos)
+                print("You moved left!")
+                my_pos=(new_x_pos - T_BIN_SIZE, y_t_bin_pos)
+        lock = True
+
+
+
+        
+
+move_rand_turtle()
