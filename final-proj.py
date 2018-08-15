@@ -4,6 +4,11 @@ import random
 
 
 
+
+
+
+
+turtle.hideturtle()
 min_x= -300
 max_x= 300
 min_y= -500
@@ -12,6 +17,32 @@ max_y= 500
 turtle.tracer(1,0)
 turtle.setup(750, 1050)
 
+#lives
+lives=turtle.Turtle()
+lives.ht()
+lives.penup()
+lives.goto(250, 450)
+turtle.register_shape("heart.gif")
+lives.shape("heart.gif")
+lives.st()
+########fix this#####################################
+lives1=turtle.Turtle()
+lives1.ht()
+lives1.penup()
+lives1.goto(200, 450)
+turtle.register_shape("heart.gif")
+lives1.shape("heart.gif")
+lives1.st()
+
+#scorelabel
+score=0
+num_label=turtle.Turtle()
+num_label.ht()
+num_label.penup()
+num_label.color("black")
+num_label.width("5")
+num_label.goto(-250, 420)
+num_label.write(str (score),align="center",font=("Arial",40))         
 
 # generates random x values for the falling items
 def rand_x():
@@ -35,14 +66,16 @@ paper.penup()
 paper.goto(rand_x(), min_y)
 
 trash = turtle.clone() 
-turtle.register_shape("trash.gif")
-trash.shape("trash.gif")
+turtle.register_shape("banana.gif")
+trash.shape("banana.gif")
 trash.penup()
 round_x = (rand_x()//20)*20
 trash.goto(round_x, min_y)
 
+
+
 #part 1
-#difine
+#difine#######################
 DISTANCE = 10
 paper_pos_list = []
 pap_pos = []
@@ -71,9 +104,9 @@ RIGHT_EDGE = 300
 LEFT_EDGE = -300
 
  # bin turtle
-turtle.register_shape("recycle.gif")
+turtle.register_shape("yhhhhh.gif")
 t_bin = turtle.Turtle()
-t_bin.shape("recycle.gif")
+t_bin.shape("yhhhhh.gif")
 
 
 t_bin.penup()
@@ -176,8 +209,12 @@ def move_t_bin():
                 my_pos=(new_x_pos - T_BIN_SIZE, y_t_bin_pos)
         lock = True
 
-
+#paper in the bin
+# def paper_in_bin():
+    
 
         
 
 move_rand_turtle()
+
+turtle.mainloop()
