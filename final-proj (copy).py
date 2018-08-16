@@ -139,28 +139,30 @@ def move_rand_turtle():
     global paper_pos
     new_paper_pos = paper.pos()
     paper_pos.append(new_paper_pos)
-    for piece in my_turtles:
-        tx, ty = t_bin.pos()
-        px, py = piece.pos()
-        if (tx >= px - 40 and tx<= px +40) and (py == ty) and piece.shape() == "paperball.gif":
-            #print(pos)
-            score += 1
-            paper.ht()
+    tx1, ty1 = t_bin.pos()
+    px1, py1 = paper.pos()
+    if (tx1 >= px1 - 40 and tx1<= px1 +40) and (py1 == ty1) and paper.shape() == "paperball.gif":
+        #print(pos)
+        score += 1
+        paper.ht()
     #make bana dowm live
     global trash_pos, live, lives_list
     new_trash_pos = trash.pos()
     trash_pos.append(new_trash_pos)
-    for piece1 in my_turtles:
-        tx, ty = t_bin.pos()
-        bx, by = piece1.pos()
-        if (tx >= bx - 40 and tx<= bx +40) and (by == ty) and piece1.shape() == "banana.gif":
-            #print(pos)
-            live-= 1
-            lives.clearstamp(lives_list[0])
-            lives_list.pop(0)
-            trash.ht()
+    tx, ty = t_bin.pos()
+    bx, by = trash.pos()
+    if (tx >= bx - 40 and tx<= bx +40) and (by == ty) and trash.shape() == "banana.gif":
+        #print(pos)
+        live-= 1
+        lives.clearstamp(lives_list[0])
+        lives_list.pop(0)
+        trash.ht()
                 
-            
+    if paper.pos()[1] == DOWN_EDGE:
+        live-= 1
+        lives.clearstamp(lives_list[0])
+        lives_list.pop(0)
+        
     print(live)
     print(score)
 
@@ -176,15 +178,12 @@ def move_rand_turtle():
         time.sleep(3)
         quit()
 
-    if paper_pos[1]== DOWN_EDGE:
-        live-= 1
-        lives.clearstamp(lives_list[0])
-        lives_list.pop(0)
 
     if score== 10:
         turtle.register_shape("office6.gif")
         turtle.bgpic("office6.gif")
         
+ 
 t_bin.goto(x_t_bin_pos, y_t_bin_pos)
 print(score)
 
